@@ -7,10 +7,10 @@
   "scripts": {
     "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
     "build": "vite build",
-    "package": "vite build && electron-builder --win",
-    "package:win": "vite build && electron-builder --win",
-    "package:mac": "vite build && electron-builder --mac",
-    "package:linux": "vite build && electron-builder --linux",
+    "package": "vite build && electron-builder --win --publish never",
+    "package:win": "vite build && electron-builder --win --publish never",
+    "package:mac": "vite build && electron-builder --mac --publish never",
+    "package:linux": "vite build && electron-builder --linux --publish never",
     "preview": "vite preview"
   },
   "dependencies": {

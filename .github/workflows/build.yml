@@ -17,6 +17,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run package:win
+        env:
+          ELECTRON_BUILDER_NO_PUBLISH_ON_PR: true
+          EP_DRAFT: false
+          CSC_IDENTITY_AUTO_DISCOVERY: false
       - uses: actions/upload-artifact@v4
         with:
           name: windows
@@ -32,6 +36,10 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run package:mac
+        env:
+          ELECTRON_BUILDER_NO_PUBLISH_ON_PR: true
+          EP_DRAFT: false
+          CSC_IDENTITY_AUTO_DISCOVERY: false
       - uses: actions/upload-artifact@v4
         with:
           name: mac
@@ -47,6 +55,9 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run package:linux
+        env:
+          ELECTRON_BUILDER_NO_PUBLISH_ON_PR: true
+          EP_DRAFT: false
       - uses: actions/upload-artifact@v4
         with:
           name: linux
