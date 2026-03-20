@@ -1,0 +1,3 @@
+npm run package        # Windows (.exe installeur NSIS)
+npm run package:mac    # Mac (.dmg)
+npm run package:linux  # Linux (.AppImage)

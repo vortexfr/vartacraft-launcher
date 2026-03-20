@@ -1,0 +1,71 @@
+{
+  "name": "vartacraft-launcher",
+  "version": "2.0.1",
+  "description": "Launcher Vartacraft - Forge 1.20.1",
+  "author": "Vartacraft",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "build": "vite build",
+    "package": "vite build && electron-builder --win",
+    "package:win": "vite build && electron-builder --win",
+    "package:mac": "vite build && electron-builder --mac",
+    "package:linux": "vite build && electron-builder --linux",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "7zip-bin": "^5.2.0",
+    "discord-rpc": "^4.0.1",
+    "node-7z": "^3.0.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^29.0.0",
+    "electron-builder": "^24.9.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^5.1.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.vartacraft.launcher",
+    "productName": "Vartacraft Launcher",
+    "files": ["dist/**/*", "electron/**/*"],
+    "extraResources": [{ "from": "src/assets", "to": "assets" }],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "src/assets/icon.ico"
+    },
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "icon": "src/assets/icon.png",
+      "category": "public.app-category.games"
+    },
+    "dmg": {
+      "title": "Vartacraft Launcher",
+      "background": "src/assets/background.png",
+      "window": { "width": 540, "height": 380 }
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "icon": "src/assets/icon.png",
+      "category": "Game"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Vartacraft Launcher",
+      "license": "build/license.txt",
+      "installerIcon": "src/assets/icon.ico",
+      "uninstallerIcon": "src/assets/icon.ico",
+      "installerLanguages": ["fr"],
+      "language": "1036",
+      "multiLanguageInstaller": false,
+      "deleteAppDataOnUninstall": false
+    }
+  }
+}

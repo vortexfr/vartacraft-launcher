@@ -1,0 +1,111 @@
+.credits {
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  animation: homeIn 0.3s ease;
+}
+
+.credits-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,151,42,0.2) transparent;
+}
+.credits-body::-webkit-scrollbar       { 
+  width: 4px; 
+}
+
+.credits-body::-webkit-scrollbar-track { 
+  background: transparent; 
+}
+
+.credits-body::-webkit-scrollbar-thumb {
+   background: rgba(201,151,42,0.2);
+   border-radius: 999px; 
+  }
+
+.credits-header { 
+  display: flex; 
+  flex-direction: column;
+  gap: 0.2rem; 
+}
+
+.credits-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.18em;
+}
+
+.credits-sub {
+  font-size: 0.73rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.credits-divider {
+  height: 1px;
+  background: rgba(201,151,42,0.14);
+}
+
+.credits-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.credits-section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(201,151,42,0.55);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.credits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.credit-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.52rem 0.85rem;
+  background: rgba(201,151,42,0.03);
+  border: 1px solid rgba(201,151,42,0.09);
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+.credit-card:hover {
+   background: rgba(201,151,42,0.06); 
+}
+
+.credit-role {
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.credit-name {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.credits-thanks {
+  font-size: 0.75rem;
+  color: rgba(201,151,42,0.4);
+  text-align: center;
+  font-style: italic;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.06em;
+  padding: 0.25rem 0;
+}

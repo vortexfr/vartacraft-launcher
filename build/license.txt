@@ -1,0 +1,40 @@
+CONDITIONS D'UTILISATION — VARTACRAFT LAUNCHER
+==============================================
+
+En installant et utilisant le Vartacraft Launcher, vous acceptez les conditions suivantes.
+
+1. UTILISATION
+   Ce launcher est fourni exclusivement pour accéder au serveur Minecraft Vartacraft.
+   Toute utilisation à d'autres fins est interdite.
+
+2. MODIFICATIONS INTERDITES
+   Il est interdit de modifier, décompiler ou redistribuer ce logiciel sans autorisation
+   écrite de l'équipe Vartacraft.
+
+3. MODS ET FICHIERS DE JEU
+   Le launcher gère automatiquement les mods autorisés sur le serveur.
+   L'ajout de mods non approuvés par l'équipe Vartacraft est interdit et peut entraîner
+   une exclusion du serveur.
+
+4. DONNÉES PERSONNELLES
+   Le launcher stocke localement votre pseudo Minecraft afin de vous connecter au serveur.
+   Aucune donnée personnelle n'est transmise à des tiers.
+
+5. RESPONSABILITÉ
+   L'équipe Vartacraft ne saurait être tenue responsable de tout dommage lié à
+   l'utilisation de ce launcher. Le logiciel est fourni "tel quel", sans garantie
+   d'aucune sorte.
+
+6. COMPTE ET PSEUDO
+   Vous êtes responsable de votre compte et de votre pseudo sur le serveur Vartacraft.
+   L'utilisation d'un pseudo différent de celui enregistré sur le site peut affecter
+   le système de vote et la boutique.
+
+7. MISES À JOUR
+   Le launcher peut se mettre à jour automatiquement afin d'assurer la compatibilité
+   avec le serveur. Vous acceptez ces mises à jour en utilisant ce logiciel.
+
+8. CONTACT
+   Pour toute question : https://vartacraft.fr/support/tickets/create
+
+En cliquant sur "J'accepte", vous confirmez avoir lu et accepté ces conditions.

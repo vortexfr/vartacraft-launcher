@@ -1,0 +1,91 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: #080810;
+  color: #ddd5c4;
+}
+
+:root {
+  --bg:       #080810;
+  --bg2:      #0e0e1a;
+  --panel:    rgba(20, 15, 5, 0.75);
+  --border:   rgba(201, 151, 42, 0.22);
+  --gold:     #c9972a;
+  --gold2:    #e8c96a;
+  --text:     #ddd5c4;
+  --muted:    #7a6e5e;
+  --error:    #f87171;
+}
+
+@keyframes homeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeUp  {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Shared titlebar ──────────────────────────────────────── */
+.titlebar {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: rgba(0,0,0,0.6);
+  border-bottom: 1px solid rgba(201,151,42,0.12);
+  -webkit-app-region: drag;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+.titlebar-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: rgba(201,151,42,0.3);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.titlebar-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+  -webkit-app-region: no-drag;
+}
+.tb-btn {
+  width: 28px; height: 22px;
+  border: none;
+  background: transparent;
+  color: #4a4035;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.tb-btn:hover           { background: rgba(201,151,42,0.12); color: var(--gold); }
+.tb-btn.tb-close:hover  { background: #7f1d1d; color: #fca5a5; }
+
+/* Back button (used in sub-pages) */
+.tb-back {
+  padding: 0 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  transition: color 0.15s;
+  white-space: nowrap;
+}
+.tb-back:hover { color: var(--gold); }
