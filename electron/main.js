@@ -551,16 +551,6 @@ async function buildLaunchArgs(username, ram, gameDir) {
 }
 
 // ── Cleaner ────────────────────────────────────────────────────────────────────
-function backupRuntime(gameDir) {
-  const runtimeBak = path.join(os.tmpdir(), 'vc_runtime_bak');
-  const rt = path.join(gameDir, 'runtime');
-  if (fs.existsSync(rt)) fs.renameSync(rt, runtimeBak);
-  return { runtimeBak, rt };
-}
-
-function restoreRuntime({ runtimeBak, rt }) {
-  if (fs.existsSync(runtimeBak)) fs.renameSync(runtimeBak, rt);
-}
 
 function readDataFiles(gameDir) {
   const profilesBak = fs.existsSync(path.join(gameDir, 'profiles.json'))
@@ -753,11 +743,11 @@ ipcMain.handle('start-install', async () => {
   const ok = await verifyManifest(gameDir).catch(() => false);
   if (!ok && fs.existsSync(gameDir)) {
     win.webContents.send('install-status', { text: '⚠ Fichiers modifiés — réinstallation...', pct: 0 });
-    const runtimeHandle = backupRuntime(gameDir);
     const dataFiles = readDataFiles(gameDir);
-    fs.rmSync(gameDir, { recursive: true, force: true });
-    mkdirp(gameDir);
-    restoreRuntime(runtimeHandle);
+    for (const entry of fs.readdirSync(gameDir)) {
+      if (entry === 'runtime') continue;
+      fs.rmSync(path.join(gameDir, entry), { recursive: true, force: true });
+    }
     writeDataFiles(gameDir, dataFiles);
   }
   mkdirp(gameDir);
@@ -802,11 +792,11 @@ ipcMain.handle('launch-game', async (_, { username, ram }) => {
     const ok = !manifestExists || await verifyManifest(gameDir).catch(() => false);
     if (!ok && fs.existsSync(gameDir)) {
       win.webContents.send('install-status', { text: '⚠ Fichiers modifiés — réinstallation...', pct: 0 });
-      const runtimeHandle = backupRuntime(gameDir);
       const dataFiles = readDataFiles(gameDir);
-      fs.rmSync(gameDir, { recursive: true, force: true });
-      mkdirp(gameDir);
-      restoreRuntime(runtimeHandle);
+      for (const entry of fs.readdirSync(gameDir)) {
+        if (entry === 'runtime') continue;
+        fs.rmSync(path.join(gameDir, entry), { recursive: true, force: true });
+      }
       writeDataFiles(gameDir, dataFiles);
     }
     mkdirp(gameDir);
