@@ -50,8 +50,6 @@ export default function Splash({ onDone }) {
   const [tipIndex, setTipIndex] = useState(() => Math.floor(Math.random() * TIPS.length));
   const [tipVisible, setTipVisible] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [jdkStatus, setJdkStatus] = useState('');
-  const [jdkPct, setJdkPct] = useState(null); 
 
   useEffect(() => {
     let nav, pFrame;
@@ -64,39 +62,13 @@ export default function Splash({ onDone }) {
       }, 400);
     }, TIP_INTERVAL);
 
-    function startCountdown() {
-      const start = Date.now();
-      pFrame = setInterval(() => {
-        const p = Math.min(100, ((Date.now() - start) / DURATION) * 100);
-        setProgress(p);
-        if (p >= 100) clearInterval(pFrame);
-      }, 50);
-      nav = setTimeout(onDone, DURATION);
-    }
-
-    if (!window.launcher) {
-      startCountdown();
-      return () => { clearTimeout(nav); clearInterval(pFrame); clearInterval(tipTimer); };
-    }
-
-    // JDK install progress
-    window.launcher.onInstallStatus(({ text, pct }) => {
-      setJdkStatus(text);
-      setJdkPct(pct ?? 0);
-    });
-
-    // Install JDK first, then start the 10s countdown
-    window.launcher.installJdk().then(result => {
-      if (!result.success && !result.alreadyInstalled) {
-        setJdkStatus('⚠ ' + (result.error || 'Erreur JDK'));
-      }
-      setJdkPct(null);
-      setJdkStatus('');
-      startCountdown();
-    }).catch(() => {
-      setJdkPct(null);
-      startCountdown();
-    });
+    const start = Date.now();
+    pFrame = setInterval(() => {
+      const p = Math.min(100, ((Date.now() - start) / DURATION) * 100);
+      setProgress(p);
+      if (p >= 100) clearInterval(pFrame);
+    }, 50);
+    nav = setTimeout(onDone, DURATION);
 
     return () => {
       clearTimeout(nav);
@@ -116,18 +88,9 @@ export default function Splash({ onDone }) {
       <div className="splash-center">
         <img className="splash-banner" src={bannerImg} alt="Vartacraft" />
 
-        {jdkPct !== null ? (
-          <div className="splash-jdk-wrap">
-            <div className="splash-jdk-bar">
-              <div className="splash-jdk-fill" style={{ width: `${jdkPct}%` }} />
-            </div>
-            <p className="splash-jdk-text">{jdkStatus || 'Java 17...'} &nbsp;<span className="splash-jdk-pct">{jdkPct}%</span></p>
-          </div>
-        ) : (
-          <div className="splash-dots">
-            <span /><span /><span />
-          </div>
-        )}
+        <div className="splash-dots">
+          <span /><span /><span />
+        </div>
       </div>
 
       {/* Tip */}
