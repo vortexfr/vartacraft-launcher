@@ -16,15 +16,22 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npm run package:win
+      - name: Decode certificate
+        run: |
+          $bytes = [Convert]::FromBase64String("${{ secrets.WINDOWS_CERT_BASE64 }}")
+          [IO.File]::WriteAllBytes("build/vartacraft.pfx", $bytes)
+        shell: pwsh
+      - name: Build & sign
+        run: npm run package:win
         env:
           ELECTRON_BUILDER_NO_PUBLISH_ON_PR: true
           EP_DRAFT: false
-          CSC_IDENTITY_AUTO_DISCOVERY: false
+          CSC_LINK: build/vartacraft.pfx
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: dist/*.exe
+          path: release/*.exe
 
   build-mac:
     runs-on: macos-latest
@@ -43,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: mac
-          path: dist/*.dmg
+          path: release/*.dmg
 
   build-linux:
     runs-on: ubuntu-latest
@@ -61,4 +68,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: linux
-          path: dist/*.AppImage
+          path: release/*.AppImage

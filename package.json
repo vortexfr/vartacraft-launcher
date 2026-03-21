@@ -1,6 +1,6 @@
 {
   "name": "vartacraft-launcher",
-  "version": "2.0.1",
+  "version": "2.0.0",
   "description": "Launcher Vartacraft - Forge 1.20.1",
   "author": "Vartacraft",
   "main": "electron/main.js",
@@ -36,7 +36,11 @@
     "extraResources": [{ "from": "src/assets", "to": "assets" }],
     "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }],
-      "icon": "src/assets/icon.ico"
+      "icon": "src/assets/icon.ico",
+      "certificateFile": "build/vartacraft.pfx",
+      "certificatePassword": "VartacraftCert2024!",
+      "signingHashAlgorithms": ["sha256"],
+      "signDlls": false
     },
     "mac": {
       "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
