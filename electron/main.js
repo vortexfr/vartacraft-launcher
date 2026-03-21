@@ -798,7 +798,8 @@ ipcMain.handle('launch-game', async (_, { username, ram }) => {
   isLaunching = true;
   try {
     const gameDir = getGameDir();
-    const ok = await verifyManifest(gameDir).catch(() => false);
+    const manifestExists = fs.existsSync(path.join(gameDir, '.manifest.json'));
+    const ok = !manifestExists || await verifyManifest(gameDir).catch(() => false);
     if (!ok && fs.existsSync(gameDir)) {
       win.webContents.send('install-status', { text: '⚠ Fichiers modifiés — réinstallation...', pct: 0 });
       const runtimeHandle = backupRuntime(gameDir);
