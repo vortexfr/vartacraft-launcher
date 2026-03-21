@@ -9,8 +9,7 @@ const https   = require('https');
 const http    = require('http');
 const net     = require('net');
 const { spawn } = require('child_process');
-const sevenBin    = require('7zip-bin');
-const { extractFull } = require('node-7z');
+const extractZipLib = require('extract-zip');
 
 let DiscordRPC;
 try { DiscordRPC = require('discord-rpc'); } catch (_) {}
@@ -134,11 +133,7 @@ function downloadFile(url, dest, onProgress) {
 
 function extractZip(zipPath, destDir) {
   mkdirp(destDir);
-  return new Promise((resolve, reject) => {
-    const stream = extractFull(zipPath, destDir, { $bin: sevenBin.path7za });
-    stream.on('end', resolve);
-    stream.on('error', reject);
-  });
+  return extractZipLib(zipPath, { dir: destDir });
 }
 
 async function fetchModList() {
