@@ -124,7 +124,7 @@ function downloadFile(url, dest, onProgress) {
       let done = 0;
       res.on('data', chunk => { done += chunk.length; if (onProgress && total > 0) onProgress(Math.round((done / total) * 100)); });
       res.pipe(file);
-      file.on('finish', () => file.close(() => { fs.renameSync(tmp, dest); resolve(); }));
+      file.on('finish', () => file.close(() => { try { fs.renameSync(tmp, dest); resolve(); } catch (e) { reject(e); } }));
     });
     req.on('error', err => { file.close(); if (fs.existsSync(tmp)) fs.unlinkSync(tmp); reject(err); });
     req.setTimeout(120000, () => { req.destroy(); reject(new Error(`Timeout: ${url}`)); });
@@ -692,7 +692,7 @@ ipcMain.handle('start-update', async (_, { url }) => {
           win?.webContents.send('update-progress', total > 0 ? Math.round((done / total) * 100) : 0);
         });
         res.pipe(file);
-        file.on('finish', () => file.close(() => { fs.renameSync(tmp, dest); resolve(); }));
+        file.on('finish', () => file.close(() => { try { fs.renameSync(tmp, dest); resolve(); } catch (e) { reject(e); } }));
       });
       req.on('error', err => { file.close(); reject(err); });
       req.setTimeout(120000, () => { req.destroy(); reject(new Error('Timeout')); });
