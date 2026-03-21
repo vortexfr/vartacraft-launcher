@@ -33,7 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: release/*.exe
+          path: dist/*.exe
 
   build-mac:
     runs-on: macos-latest
@@ -52,7 +52,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: mac
-          path: release/*.dmg
+          path: dist/*.dmg
 
   build-linux:
     runs-on: ubuntu-latest
@@ -70,4 +70,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: linux
-          path: release/*.AppImage
+          path: dist/*.AppImage
