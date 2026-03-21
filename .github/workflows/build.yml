@@ -28,6 +28,7 @@ jobs:
           EP_DRAFT: false
           CSC_LINK: build/vartacraft.pfx
           CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+          WIN_CSP_SHA1: ""
       - uses: actions/upload-artifact@v4
         with:
           name: windows

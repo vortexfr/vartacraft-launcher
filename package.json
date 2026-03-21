@@ -39,6 +39,7 @@
       "icon": "src/assets/icon.ico",
       "certificateFile": "build/vartacraft.pfx",
       "certificatePassword": "VartacraftCert2024!",
+      "publisherName": "Vartacraft",
       "signingHashAlgorithms": ["sha256"],
       "signDlls": false
     },
