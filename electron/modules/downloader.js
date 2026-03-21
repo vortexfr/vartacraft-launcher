@@ -6,9 +6,7 @@ const https  = require('https');
 const http   = require('http');
 const crypto = require('crypto');
 const net    = require('net');
-const sevenBin    = require('7zip-bin');
-const { extractFull } = require('node-7z');
-const path7za = sevenBin.path7za.replace('app.asar', 'app.asar.unpacked');
+const extractZipLib = require('extract-zip');
 
 const { MOD_URL, mkdirp } = require('./paths');
 
@@ -78,11 +76,7 @@ function downloadFile(url, dest, onProgress) {
 
 function extractZip(zipPath, destDir) {
   mkdirp(destDir);
-  return new Promise((resolve, reject) => {
-    const stream = extractFull(zipPath, destDir, { $bin: path7za });
-    stream.on('end', resolve);
-    stream.on('error', reject);
-  });
+  return extractZipLib(zipPath, { dir: destDir });
 }
 
 // ── Mod list ───────────────────────────────────────────────────────────────────

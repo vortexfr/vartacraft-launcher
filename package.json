@@ -33,7 +33,6 @@
     "appId": "com.vartacraft.launcher",
     "productName": "Vartacraft Launcher",
     "files": ["dist/**/*", "electron/**/*"],
-    "asarUnpack": ["**/node_modules/7zip-bin/**"],
     "extraResources": [{ "from": "src/assets", "to": "assets" }],
     "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }],
