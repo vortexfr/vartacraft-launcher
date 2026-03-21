@@ -16,10 +16,12 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - name: Decode certificate
+      - name: Decode & import certificate
         run: |
           $bytes = [Convert]::FromBase64String("${{ secrets.WINDOWS_CERT_BASE64 }}")
           [IO.File]::WriteAllBytes("build/vartacraft.pfx", $bytes)
+          $pwd = ConvertTo-SecureString -String "${{ secrets.WINDOWS_CERT_PASSWORD }}" -Force -AsPlainText
+          Import-PfxCertificate -FilePath "build/vartacraft.pfx" -CertStoreLocation Cert:\LocalMachine\My -Password $pwd
         shell: pwsh
       - name: Build & sign
         run: npm run package:win
@@ -28,7 +30,6 @@ jobs:
           EP_DRAFT: false
           CSC_LINK: build/vartacraft.pfx
           CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
-          WIN_CSP_SHA1: ""
       - uses: actions/upload-artifact@v4
         with:
           name: windows

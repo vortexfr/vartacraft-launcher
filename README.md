@@ -170,10 +170,10 @@ Modifier la version dans `package.json`, puis :
 
 ```bash
 git add .
-git commit -m "v2.0.0"
+git commit -m "v1.0.0"
 git push
-git tag v2.0.0
-git push origin v2.0.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 GitHub Actions build automatiquement Windows + Mac + Linux.
