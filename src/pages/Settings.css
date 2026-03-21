@@ -209,3 +209,187 @@
   padding: 0.3rem;
   animation: fadeUp 0.3s ease;
 }
+
+/* ── Toggle switch ───────────────────────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.toggle-label {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.toggle-hint {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+  line-height: 1.4;
+}
+.toggle-btn {
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(201,151,42,0.15);
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.toggle-btn.on {
+  background: rgba(201,151,42,0.22);
+  border-color: rgba(201,151,42,0.5);
+}
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.2s;
+  display: block;
+}
+.toggle-btn.on .toggle-thumb {
+  left: calc(100% - 19px);
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(201,151,42,0.5);
+}
+
+/* ── JDK ─────────────────────────────────────────────────────── */
+.jdk-info {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(201,151,42,0.1);
+  border-radius: 7px;
+  padding: 0.5rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.jdk-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.jdk-badge {
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(201,151,42,0.1);
+  color: var(--gold);
+  border: 1px solid rgba(201,151,42,0.22);
+  flex-shrink: 0;
+}
+.jdk-badge.custom {
+  background: rgba(100,149,237,0.1);
+  color: #6495ed;
+  border-color: rgba(100,149,237,0.22);
+}
+.jdk-version {
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: var(--text);
+}
+.jdk-path {
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+.jdk-absent { font-style: italic; }
+.jdk-error {
+  font-size: 0.7rem;
+  color: var(--error);
+  background: rgba(248,113,113,0.07);
+  border: 1px solid rgba(248,113,113,0.18);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+}
+.jdk-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.jdk-choose-btn {
+  padding: 0.45rem 1rem;
+  background: rgba(201,151,42,0.08);
+  border: 1px solid rgba(201,151,42,0.25);
+  border-radius: 7px;
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.jdk-choose-btn:hover:not(:disabled) {
+  background: rgba(201,151,42,0.15);
+  border-color: rgba(201,151,42,0.45);
+}
+.jdk-choose-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.jdk-reset-btn {
+  padding: 0.45rem 1rem;
+  background: rgba(248,113,113,0.07);
+  border: 1px solid rgba(248,113,113,0.2);
+  border-radius: 7px;
+  color: #f87171;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+  align-self: flex-start;
+}
+.jdk-reset-btn:hover:not(:disabled) {
+  background: rgba(248,113,113,0.14);
+  border-color: rgba(248,113,113,0.4);
+}
+.jdk-reset-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.jdk-warning-box {
+  background: rgba(248,113,113,0.05);
+  border: 1px solid rgba(248,113,113,0.18);
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.jdk-warning-text {
+  font-size: 0.72rem;
+  color: #f87171;
+  line-height: 1.55;
+}
+.jdk-warning-actions { display: flex; gap: 0.5rem; }
+.jdk-confirm-btn {
+  padding: 0.38rem 0.9rem;
+  background: rgba(248,113,113,0.14);
+  border: 1px solid rgba(248,113,113,0.35);
+  border-radius: 6px;
+  color: #f87171;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.jdk-confirm-btn:hover { background: rgba(248,113,113,0.25); }
+.jdk-cancel-btn {
+  padding: 0.38rem 0.9rem;
+  background: transparent;
+  border: 1px solid rgba(201,151,42,0.18);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.jdk-cancel-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }

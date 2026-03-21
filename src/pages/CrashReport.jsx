@@ -25,8 +25,8 @@ export default function CrashReport({ data, onBack }) {
         <div style={{ flex: 1 }} />
         <span className="titlebar-title">VARTACRAFT LAUNCHER</span>
         <div className="titlebar-controls">
-          <button className="tb-btn"          onClick={() => window.launcher?.minimize()}>─</button>
-          <button className="tb-btn tb-close" onClick={() => window.launcher?.close()}>✕</button>
+          <button className="tb-btn"          onClick={() => window.launcher?.minimize()}><svg width="10" height="2" viewBox="0 0 10 2" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><line x1="0" y1="1" x2="10" y2="1"/></svg></button>
+          <button className="tb-btn tb-close" onClick={() => window.launcher?.close()}><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
         </div>
       </div>
 

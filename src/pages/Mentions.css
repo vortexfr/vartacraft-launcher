@@ -16,11 +16,22 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(201,151,42,0.2) transparent;
 }
-.mentions-body::-webkit-scrollbar       { width: 4px; }
-.mentions-body::-webkit-scrollbar-track { background: transparent; }
-.mentions-body::-webkit-scrollbar-thumb { background: rgba(201,151,42,0.2); border-radius: 999px; }
+.mentions-body::-webkit-scrollbar {
+   width: 4px; 
+}
+.mentions-body::-webkit-scrollbar-track { 
+  background: transparent; 
+}
+.mentions-body::-webkit-scrollbar-thumb {
+   background: rgba(201,151,42,0.2);
+   border-radius: 999px; 
+}
 
-.mentions-header { display: flex; flex-direction: column; gap: 0.2rem; }
+.mentions-header { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0.2rem;
+}
 
 .mentions-title {
   font-family: 'Cinzel', serif;
@@ -59,7 +70,9 @@
   line-height: 1.6;
 }
 
-.mentions-section strong { color: var(--text); }
+.mentions-section strong { 
+  color: var(--text); 
+}
 
 .mentions-link {
   color: var(--gold);
@@ -68,4 +81,6 @@
   text-underline-offset: 2px;
   transition: color 0.15s;
 }
-.mentions-link:hover { color: var(--gold2); }
+.mentions-link:hover { 
+  color: var(--gold2); 
+}

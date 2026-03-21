@@ -75,6 +75,65 @@ body {
 .tb-btn:hover           { background: rgba(201,151,42,0.12); color: var(--gold); }
 .tb-btn.tb-close:hover  { background: #7f1d1d; color: #fca5a5; }
 
+/* ── Drag helpers ─────────────────────────────────────────── */
+.no-drag {
+  -webkit-app-region: no-drag;
+}
+
+/* ── Page transition overlay ──────────────────────────────── */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  background: #080810;
+  overflow: hidden;
+}
+.nav-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0;
+  width: 3px;
+  will-change: transform, opacity;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(201,151,42,0.15) 15%,
+    rgba(232,200,106,0.95) 50%,
+    rgba(201,151,42,0.15) 85%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 18px 4px rgba(201,151,42,0.7),
+    0 0 50px 10px rgba(201,151,42,0.25);
+}
+.nav-overlay--in {
+  will-change: opacity;
+  animation: navIn 0.28s ease both;
+}
+.nav-overlay--in::after {
+  animation: goldSweep 0.28s cubic-bezier(0.4,0,0.6,1) both;
+}
+.nav-overlay--out {
+  will-change: opacity;
+  animation: navOut 0.48s ease both;
+}
+@keyframes navIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes navOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes goldSweep {
+  from { transform: translateX(-4px);      opacity: 0; }
+  8%   {                                   opacity: 1; }
+  92%  {                                   opacity: 1; }
+  to   { transform: translateX(100vw);     opacity: 0; }
+}
+
 /* Back button (used in sub-pages) */
 .tb-back {
   padding: 0 0.5rem;
@@ -85,7 +144,37 @@ body {
   font-family: inherit;
   cursor: pointer;
   -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   transition: color 0.15s;
   white-space: nowrap;
 }
 .tb-back:hover { color: var(--gold); }
+
+/* ── Close confirmation popup buttons ────────────────────── */
+.popup-btn-close {
+  background: linear-gradient(135deg,#8a1e1e,#b91c1c);
+  border: 1px solid rgba(248,113,113,0.3);
+  border-radius: 7px; color: #fca5a5;
+  font-family: 'Cinzel', serif; font-weight: 700;
+  padding: 0.55rem 1.4rem; cursor: pointer; font-size: 0.8rem;
+  letter-spacing: 0.05em; transition: background 0.15s, box-shadow 0.15s;
+}
+.popup-btn-close:hover {
+  background: linear-gradient(135deg,#a82222,#dc2626);
+  box-shadow: 0 0 12px rgba(248,113,113,0.3);
+}
+.popup-btn-cancel {
+  background: rgba(201,151,42,0.08);
+  border: 1px solid rgba(201,151,42,0.25);
+  border-radius: 7px; color: rgba(201,151,42,0.8);
+  font-family: 'Cinzel', serif; font-weight: 700;
+  padding: 0.55rem 1.4rem; cursor: pointer; font-size: 0.8rem;
+  letter-spacing: 0.05em; transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+.popup-btn-cancel:hover {
+  background: rgba(201,151,42,0.15);
+  border-color: rgba(201,151,42,0.5);
+  box-shadow: 0 0 12px rgba(201,151,42,0.15);
+}

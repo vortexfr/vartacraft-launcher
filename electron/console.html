@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Console Java — Vartacraft</title>
+  <style>
+    * { 
+      margin: 0; 
+      padding: 0;
+       box-sizing: border-box; 
+    }
+    html, body {
+       height: 100%; 
+       background: #040604; 
+    }
+    body {
+      color: rgba(74,222,128,0.82);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.55;
+      padding: 8px 10px 10px;
+      overflow-y: auto;
+    }
+    #header {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(74,222,128,0.28);
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(74,222,128,0.1);
+      margin-bottom: 6px;
+      position: sticky;
+      top: 0;
+      background: #040604;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .line {
+       white-space: pre-wrap; 
+       word-break: break-all; 
+    }
+    .err {
+       color: rgba(248,113,113,0.9);
+     }
+    .warn {
+       color: rgba(251,191,36,0.82); 
+    }
+    .closed {
+      color: rgba(74,222,128,0.3);
+      font-style: italic; margin-top: 6px; 
+    }
+    ::-webkit-scrollbar {
+       width: 4px; background: transparent; 
+    }
+    ::-webkit-scrollbar-thumb { 
+      background: rgba(74,222,128,0.15);
+      border-radius: 2px; 
+  }
+  </style>
+</head>
+<body>
+  <div id="header">▸ Console Java — Vartacraft Launcher</div>
+  <div id="output"></div>
+  <script>
+    const output = document.getElementById('output');
+
+    window.consoleApi.onGameLog(text => {
+      const lines = text.split('\n');
+      for (const raw of lines) {
+        const line = raw.replace(/\r$/, '');
+        if (!line.trim()) continue;
+        const div = document.createElement('div');
+        const l = line.toLowerCase();
+        div.className = 'line' + (
+          /error|exception|crash|fatal/.test(l) ? ' err' :
+          /warn|warning/.test(l) ? ' warn' : ''
+        );
+        div.textContent = line;
+        output.appendChild(div);
+      }
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    window.consoleApi.onGameClosed(() => {
+      const div = document.createElement('div');
+      div.className = 'closed';
+      div.textContent = '--- Jeu fermé ---';
+      output.appendChild(div);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  </script>
+</body>
+</html>
