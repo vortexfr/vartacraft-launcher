@@ -3,16 +3,14 @@ import backgroundImg from '../assets/background.png';
 import bannerImg from '../assets/banner.png';
 import './Home.css';
 
-export default function Home({ onNav }) {
-  const [profiles, setProfiles] = useState([]);
-  const [selected, setSelected] = useState('');
+export default function Home({ onNav, radioBarActive }) {
+  const [auth, setAuth] = useState(null);
   const [ram, setRam] = useState(4);
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
   const [launching, setLaunching] = useState(false);
   const [error, setError] = useState('');
   const [server, setServer] = useState(undefined);
-  const [showDropdown, setShowDropdown] = useState(false);
   const [announcement, setAnnouncement] = useState(null);
   const [playtime, setPlaytime] = useState(null);
   const [ramWarning, setRamWarning] = useState(null); // { totalGb }
@@ -29,15 +27,13 @@ export default function Home({ onNav }) {
   }
 
   useEffect(() => {
-    window.launcher?.getProfiles()
+    window.launcher?.getAuth()
       .then(data => {
-        const profs = data?.profiles || [];
-        if (profs.length === 0) { onNav('welcome'); return; }
-        setProfiles(profs);
-        setSelected(data?.selected || '');
+        if (!data?.pseudo) { onNav('login'); return; }
+        setAuth(data);
         setReady(true);
       })
-      .catch(() => setReady(true));
+      .catch(() => { onNav('login'); });
 
     const savedRam = Number(localStorage.getItem('vc_ram')) || 4;
     setRam(Math.max(4, savedRam));
@@ -102,14 +98,14 @@ export default function Home({ onNav }) {
   }, []);
 
   const handleLaunch = async () => {
-    if (!selected.trim() || launching) return;
+    if (!auth?.pseudo || launching) return;
     setError('');
     setLaunching(true);
     setProgress(0);
     setStatus('Vérification...');
     if (devConsole) window.launcher?.openConsoleWindow();
-    window.launcher?.setRPC('En jeu sur Vartacraft', selected.trim());
-    const result = await window.launcher.launch({ username: selected.trim(), ram });
+    window.launcher?.setRPC('En jeu sur Vartacraft', auth.pseudo);
+    const result = await window.launcher.launch({ username: auth.pseudo, ram });
     if (!result.success) {
       setError(result.error);
       setLaunching(false);
@@ -118,18 +114,11 @@ export default function Home({ onNav }) {
     }
   };
 
-  const handleSelectProfile = async (name) => {
-    setSelected(name);
-    setShowDropdown(false);
-    const data = await window.launcher?.getProfiles();
-    if (data) window.launcher?.saveProfiles({ ...data, selected: name });
-  };
-
   if (!ready) return null;
 
   return (
     <>
-    <div className="home" onClick={() => setShowDropdown(false)}>
+    <div className="home">
       <img className="home-bg" src={backgroundImg} alt="" />
       <div className="home-overlay" />
 
@@ -168,6 +157,14 @@ export default function Home({ onNav }) {
               <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
             </svg>
             <span className="sidebar-label">Paramètres</span>
+          </button>
+
+          {/* Radio */}
+          <button className="sidebar-btn" disabled={launching} onClick={() => onNav('radio')}>
+            <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
+            </svg>
+            <span className="sidebar-label">Radio</span>
           </button>
 
           {/* News */}
@@ -210,7 +207,7 @@ export default function Home({ onNav }) {
             <span className="sidebar-label">Captures</span>
           </button>
 
-          <div className="sidebar-bottom">
+          <div className="sidebar-bottom" style={radioBarActive ? { paddingBottom: '44px' } : undefined}>
             {/* Site */}
             <button className="sidebar-btn" onClick={() => window.launcher?.openUrl('https://vartacraft.fr/')}>
               <svg className="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -252,12 +249,12 @@ export default function Home({ onNav }) {
 
           {/* Play area: skin + panel side by side */}
           <div className="home-play-area">
-          {selected && (
+          {auth?.pseudo && (
             <div className="home-skin">
               <img
                 ref={skinRef}
                 className="home-skin-img"
-                src={`https://mc-heads.net/body/${encodeURIComponent(selected)}/80`}
+                src={`https://mc-heads.net/body/${encodeURIComponent(auth.pseudo)}/80`}
                 alt=""
                 style={{ transform: skinTransform, transition: 'transform 0.18s ease-out' }}
                 onError={e => { e.currentTarget.style.display = 'none'; }}
@@ -266,41 +263,15 @@ export default function Home({ onNav }) {
           )}
 
           {/* Panel */}
-          <div className="home-panel" onClick={e => e.stopPropagation()}>
-            <div className="home-warning">
-              ⚠ Utilisez le même pseudo que sur le site pour le système de vote et boutique
-            </div>
-
-            <div
-              className={`profile-selector ${showDropdown ? 'open' : ''}`}
-              onClick={() => !launching && setShowDropdown(v => !v)}
-            >
+          <div className="home-panel">
+            <div className="home-user-badge">
               <span className="profile-icon">👤</span>
-              <span className="profile-name">{selected || 'Sélectionner un profil...'}</span>
-              <span className="profile-arrow">{showDropdown ? '▲' : '▼'}</span>
+              <span className="profile-name">{auth?.pseudo}</span>
+              {auth?.grade && auth.grade !== 'membre' && (
+                <span className="home-grade">{auth.grade}</span>
+              )}
             </div>
 
-            {showDropdown && (
-              <div className="profile-dropdown">
-                {profiles.length === 0 ? (
-                  <div className="profile-empty">Aucun profil — créez-en un dans Paramètres</div>
-                ) : (
-                  profiles.map(p => (
-                    <div
-                      key={p.name}
-                      className={`profile-option ${selected === p.name ? 'active' : ''}`}
-                      onClick={() => handleSelectProfile(p.name)}
-                    >
-                      {p.name}
-                    </div>
-                  ))
-                )}
-              </div>
-            )}
-
-            {!selected && !error && (
-              <p className="home-notice">Aucun profil sélectionné — créez-en un dans Paramètres</p>
-            )}
             {error && <p className="home-error">{error}</p>}
 
             {launching && (
@@ -318,7 +289,7 @@ export default function Home({ onNav }) {
             <button
               className={`home-play ${launching ? 'loading' : ''}`}
               onClick={handleLaunch}
-              disabled={launching || !selected.trim()}
+              disabled={launching || !auth?.pseudo}
             >
               {launching
                 ? <span className="dots"><span /><span /><span /></span>

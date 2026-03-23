@@ -1,6 +1,6 @@
 {
   "name": "vartacraft-launcher",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Launcher Vartacraft - Forge 1.20.1",
   "author": "Vartacraft",
   "main": "electron/main.js",

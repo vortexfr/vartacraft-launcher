@@ -108,7 +108,7 @@ export default function Splash({ onDone }) {
           <div className="splash-progress-fill" style={{ width: `${progress}%` }} />
         </div>
         <p className="splash-loading-text">Chargement en cours, veuillez patienter…</p>
-        <p className="splash-version">Forge 1.20.1 — 47.4.13</p>
+        <p className="splash-version">Vartacarft - Launcher</p>
       </div>
     </div>
   );

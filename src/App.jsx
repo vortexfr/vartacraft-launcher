@@ -6,13 +6,14 @@ import Credits from './pages/Credits';
 import Mentions from './pages/Mentions';
 import CrashReport from './pages/CrashReport';
 import News from './pages/News';
-import Welcome from './pages/Welcome';
+import Login from './pages/Login';
 import Screenshots from './pages/Screenshots';
 import Mods from './pages/Mods';
 import Transition from './pages/Transition';
+import Radio from './pages/Radio';
 
 export default function App() {
-  const [page, setPage]           = useState('splash');
+  const [page, setPage]           = useState(null); // null = vérification auth en cours
   const [overlay, setOverlay]     = useState('hidden'); // 'hidden' | 'in' | 'out'
   const [overlayKey, setOverlayKey] = useState(0);       // force remount on each new nav
   const [crashData, setCrashData] = useState(null);
@@ -20,6 +21,35 @@ export default function App() {
   const [updatePct,  setUpdatePct]  = useState(null);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const navRef = useRef([]);
+
+  // ── Radio global ──────────────────────────────────────────────
+  const audioRef = useRef(null);
+  const [radioStation, setRadioStation] = useState(null);
+  const [radioPlaying, setRadioPlaying] = useState(false);
+  const [radioVolume,  setRadioVolume]  = useState(0.7);
+
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.volume = radioVolume;
+    return () => { audioRef.current?.pause(); };
+  }, []); // eslint-disable-line
+
+  useEffect(() => {
+    if (!audioRef.current) return;
+    if (!radioStation || !radioPlaying) { audioRef.current.pause(); return; }
+    audioRef.current.src = radioStation.url;
+    audioRef.current.play().catch(() => setRadioPlaying(false));
+  }, [radioStation, radioPlaying]);
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = radioVolume;
+  }, [radioVolume]);
+
+  function radioSelect(station) {
+    if (radioStation?.id === station.id) setRadioPlaying(p => !p);
+    else { setRadioStation(station); setRadioPlaying(true); }
+  }
+  const showBar = radioStation && !['login','splash','transition',null].includes(page);
 
   // Cinematic page transition: dark overlay + gold sweep line
   const navigate = useCallback((newPage) => {
@@ -39,6 +69,13 @@ export default function App() {
     }, 280);
 
     navRef.current = [t1];
+  }, []);
+
+  // Vérification auth au démarrage
+  useEffect(() => {
+    window.launcher?.getAuth()
+      .then(auth => setPage(auth?.pseudo ? 'splash' : 'login'))
+      .catch(() => setPage('login'));
   }, []);
 
   // Intercept close globally via IPC event from main process
@@ -68,17 +105,19 @@ export default function App() {
   }
 
   const page_el = (() => {
-    if (page === 'splash')      return <Splash      onDone={() => navigate('transition')} />;
-    if (page === 'transition')  return <Transition  onDone={() => navigate('home')} />;
-    if (page === 'crash')       return <CrashReport data={crashData} onBack={() => navigate('home')} />;
-    if (page === 'welcome')     return <Welcome      onDone={() => navigate('home')} />;
-    if (page === 'news')        return <News         onBack={() => navigate('home')} />;
+    if (page === null)          return null;
+    if (page === 'login')       return <Login        onDone={() => navigate('splash')} />;
+    if (page === 'splash')      return <Splash       onDone={() => navigate('transition')} />;
+    if (page === 'transition')  return <Transition   onDone={() => navigate('home')} />;
+    if (page === 'crash')       return <CrashReport  data={crashData} onBack={() => navigate('home')} />;
+    if (page === 'news')        return <News          onBack={() => navigate('home')} />;
     if (page === 'screenshots') return <Screenshots  onBack={() => navigate('home')} />;
     if (page === 'mods')        return <Mods         onBack={() => navigate('home')} />;
-    if (page === 'settings')    return <Settings     onBack={() => navigate('home')} />;
+    if (page === 'settings')    return <Settings     onBack={() => navigate('home')} onLogout={() => navigate('login')} />;
     if (page === 'credits')     return <Credits      onBack={() => navigate('home')} />;
     if (page === 'mentions')    return <Mentions     onBack={() => navigate('home')} />;
-    return <Home onNav={navigate} />;
+    if (page === 'radio')       return <Radio        onBack={() => navigate('home')} currentStation={radioStation} isPlaying={radioPlaying} onSelect={radioSelect} volume={radioVolume} onVolume={setRadioVolume} />;
+    return <Home onNav={navigate} radioBarActive={showBar} />;
   })();
 
   return (
@@ -173,6 +212,24 @@ export default function App() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Mini radio bar — persiste sur toutes les pages */}
+      {showBar && (
+        <div className="radio-bar">
+          <div className="radio-bar-dot" style={{ '--dot-color': radioStation.color }} />
+          <span className="radio-bar-name">{radioStation.name}</span>
+          <span className="radio-bar-genre">{radioStation.genre}</span>
+          <button className="radio-bar-btn" onClick={() => setRadioPlaying(p => !p)}>
+            {radioPlaying
+              ? <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              : <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>}
+          </button>
+          <button className="radio-bar-btn" onClick={() => { setRadioPlaying(false); setRadioStation(null); }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+          </button>
+          <input type="range" min="0" max="1" step="0.01" value={radioVolume} onChange={e => setRadioVolume(parseFloat(e.target.value))} className="radio-bar-vol" />
         </div>
       )}
 

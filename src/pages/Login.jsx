@@ -3,7 +3,7 @@ import backgroundImg from '../assets/background.png';
 import bannerImg from '../assets/banner.png';
 import './Welcome.css';
 
-export default function Welcome({ onDone }) {
+export default function Login({ onDone }) {
   const [pseudo,   setPseudo]   = useState('');
   const [password, setPassword] = useState('');
   const [error,    setError]    = useState('');

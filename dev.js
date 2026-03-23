@@ -3,19 +3,17 @@ const { spawn } = require('child_process');
 const net = require('net');
 const path = require('path');
 
-const viteScript   = path.resolve('./node_modules/vite/bin/vite.js');
+const viteScript = path.resolve('./node_modules/vite/bin/vite.js');
 const electronPath = require('./node_modules/electron');
-const nodePath     = process.execPath;
+const nodePath  = process.execPath;
 
-console.log('[dev] node    :', nodePath);
+console.log('[dev] node :', nodePath);
 console.log('[dev] electron:', electronPath);
 
-// ── Start Vite ─────────────────────────────────────────────────
 console.log('[dev] Starting Vite...');
 const vite = spawn(nodePath, [viteScript], { stdio: 'inherit' });
 vite.on('error', err => { console.error('[dev] Vite spawn error:', err.message); });
 
-// ── Start Electron after a fixed delay (5s) ────────────────────
 setTimeout(() => {
   console.log('[dev] Launching Electron...');
   const electron = spawn(electronPath, ['.'], {

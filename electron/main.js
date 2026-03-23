@@ -25,7 +25,7 @@ const SERVER_HOST         = 'gm53-dc02.ouiheberg.com';
 const SERVER_PORT         = 25632;
 const DISCORD_CLIENT_ID   = '1458808505380376810';
 const UPDATE_URL          = 'https://launcher.ouiweb.eu/launcher/version.json';
-const PRESERVED           = ['profiles.json', 'launcher-config.json', 'runtime', 'screenshots', 'resourcepacks', 'shaderpacks', 'config'];
+const PRESERVED           = ['profiles.json', 'launcher-config.json', 'auth.json', 'runtime', 'screenshots', 'resourcepacks', 'shaderpacks', 'config'];
 
 // ── Paths ──────────────────────────────────────────────────────────────────────
 function getGameDir() { return path.join(app.getPath('appData'), '.VartacraftGame'); }
@@ -51,6 +51,28 @@ function saveProfiles(data) {
     mkdirp(getGameDir());
     fs.writeFileSync(getProfilesPath(), JSON.stringify(data, null, 2));
   } catch (_) {}
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────────
+function getAuthPath() { return path.join(getGameDir(), 'auth.json'); }
+
+function loadAuth() {
+  try {
+    const p = getAuthPath();
+    if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf-8'));
+  } catch (_) {}
+  return null;
+}
+
+function saveAuth(data) {
+  try {
+    mkdirp(getGameDir());
+    fs.writeFileSync(getAuthPath(), JSON.stringify(data, null, 2));
+  } catch (_) {}
+}
+
+function clearAuth() {
+  try { fs.unlinkSync(getAuthPath()); } catch (_) {}
 }
 
 function getLauncherConfig() {
@@ -508,7 +530,7 @@ async function buildLaunchArgs(username, ram, gameDir) {
     return path.join(gameDir, 'versions', FORGE_VERSION_ID, `${FORGE_VERSION_ID}.jar`);
   })();
 
-  const sep       = process.platform === 'win32' ? ';' : ':';
+  const sep = process.platform === 'win32' ? ';' : ':';
   const classpath = [...libs, mainJar].join(sep);
 
   const officialAssets = path.join(
@@ -531,8 +553,8 @@ async function buildLaunchArgs(username, ram, gameDir) {
     library_directory:   path.join(gameDir, 'libraries'),
     classpath_separator: sep,
     classpath,
-    launcher_name:       'VartacraftLauncher',
-    launcher_version:    '2.0.0',
+    launcher_name:  'VartacraftLauncher',
+    launcher_version:  '1.1.0',
     clientid:   '0',
     auth_xuid:  '0',
   };
@@ -665,9 +687,11 @@ async function checkForUpdates() {
     const current = app.getVersion();
     if (!semverGt(data.version, current)) return;
     let url;
-    if (process.platform === 'darwin')      url = data.url_mac   || data.url;
-    else if (process.platform === 'linux')  url = data.url_linux || data.url;
-    else                                    url = data.url_win   || data.url;
+    if (process.platform === 'darwin') {
+      if (process.arch === 'arm64') url = data.url_mac_arm || data.url_mac || data.url;
+      else                          url = data.url_mac_x64 || data.url_mac || data.url;
+    } else if (process.platform === 'linux')  url = data.url_linux || data.url;
+    else                                      url = data.url_win   || data.url;
     if (!url) return;
     win?.webContents.send('update-available', { current, latest: data.version, url, notes: data.notes || '' });
   } catch (_) {}
@@ -859,6 +883,41 @@ ipcMain.handle('get-game-dir',   () => getGameDir());
 ipcMain.handle('ping-server',    () => pingMinecraftServer(SERVER_HOST, SERVER_PORT));
 ipcMain.handle('get-profiles',   () => loadProfiles());
 ipcMain.handle('save-profiles',  (_, data) => { saveProfiles(data); return true; });
+
+// ── Auth IPC ───────────────────────────────────────────────────────────────────
+ipcMain.handle('get-auth', () => loadAuth());
+ipcMain.handle('launcher-logout', () => { clearAuth(); return true; });
+
+ipcMain.handle('launcher-login', async (_, { pseudo, password }) => {
+  return new Promise((resolve) => {
+    const body = `pseudo=${encodeURIComponent(pseudo)}&password=${encodeURIComponent(password)}`;
+    const req = https.request({
+      hostname: 'vartacraft.fr',
+      path: '/api/launcher-auth',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    }, res => {
+      let d = '';
+      res.on('data', c => d += c);
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(d);
+          if (json.success) saveAuth({ pseudo: json.pseudo, grade: json.grade });
+          resolve(json);
+        } catch (_) {
+          resolve({ success: false, error: 'Réponse invalide du serveur.' });
+        }
+      });
+    });
+    req.on('error', () => resolve({ success: false, error: 'Impossible de contacter le serveur.' }));
+    req.setTimeout(10000, () => { req.destroy(); resolve({ success: false, error: 'Délai dépassé.' }); });
+    req.write(body);
+    req.end();
+  });
+});
 
 ipcMain.handle('get-jdk-info', async () => {
   const gameDir = getGameDir();

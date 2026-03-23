@@ -1,15 +1,9 @@
-import {
-   useState,
-   useEffect,
-   useRef 
-} from 'react';
+import { useState, useEffect } from 'react';
 import './Settings.css';
 
-export default function Settings({ onBack }) {
-  const [profiles, setProfiles] = useState([]);
-  const [selected, setSelected] = useState('');
+export default function Settings({ onBack, onLogout }) {
+  const [auth, setAuth] = useState(null);
   const [ram, setRam] = useState(4);
-  const [newName, setNewName] = useState('');
   const [saveMsg, setSaveMsg] = useState('');
   const [devConsole, setDevConsole] = useState(() => localStorage.getItem('vc_devconsole') === '1');
   const [autoMinimize, setAutoMinimize] = useState(true);
@@ -21,15 +15,9 @@ export default function Settings({ onBack }) {
   const [jdkError, setJdkError] = useState('');
   const [repairWarning, setRepairWarning] = useState(false);
   const [repairing, setRepairing] = useState(false);
-  const inputRef = useRef(null);
 
   useEffect(() => {
-    window.launcher?.getProfiles()
-      .then(data => {
-        setProfiles(data?.profiles || []);
-        setSelected(data?.selected || '');
-      })
-      .catch(() => {});
+    window.launcher?.getAuth().then(setAuth).catch(() => {});
     const savedRam = Number(localStorage.getItem('vc_ram')) || 4;
     setRam(Math.max(4, savedRam));
     window.launcher?.getJdkInfo()
@@ -44,41 +32,16 @@ export default function Settings({ onBack }) {
       .catch(() => {});
   }, []);
 
-  const persist = async (updatedProfiles, updatedSelected, updatedRam) => {
-    const pList = updatedProfiles ?? profiles;
-    const sel = updatedSelected ?? selected;
-    const r = updatedRam ?? ram;
-    localStorage.setItem('vc_ram', r);
-    await window.launcher?.saveProfiles({ profiles: pList, selected: sel });
+  const handleRamUp = (value) => {
+    localStorage.setItem('vc_ram', value);
     setSaveMsg('Sauvegardé !');
     setTimeout(() => setSaveMsg(''), 2000);
   };
 
-  const addProfile = async () => {
-    const name = newName.trim();
-    if (!name || profiles.find(p => p.name === name)) return;
-    const updated = [...profiles, { name }];
-    const newSel  = selected || name;
-    setProfiles(updated);
-    setSelected(newSel);
-    setNewName('');
-    await persist(updated, newSel, null);
+  const handleLogout = async () => {
+    await window.launcher?.logout().catch(() => {});
+    onLogout?.();
   };
-
-  const deleteProfile = async (name) => {
-    const updated = profiles.filter(p => p.name !== name);
-    const newSel  = selected === name ? (updated[0]?.name || '') : selected;
-    setProfiles(updated);
-    setSelected(newSel);
-    await persist(updated, newSel, null);
-  };
-
-  const selectProfile = async (name) => {
-    setSelected(name);
-    await persist(null, name, null);
-  };
-
-  const handleRamUp = (value) => { persist(null, null, value); };
 
   const toggleDevConsole = () => {
     const next = !devConsole;
@@ -182,37 +145,22 @@ export default function Settings({ onBack }) {
           <p className="ram-hint">4 Go minimum recommandé pour Forge 1.20.1</p>
         </section>
 
-        {/* Profiles */}
+        {/* Account */}
         <section className="settings-section">
-          <h2 className="settings-section-title">Profils</h2>
-          <p className="settings-desc">Gérez vos pseudos Minecraft</p>
-          <div className="profile-list">
-            {profiles.length === 0 && (
-              <div className="profile-empty-msg">Aucun profil créé</div>
+          <h2 className="settings-section-title">Compte</h2>
+          <p className="settings-desc">Connecté en tant que <strong style={{ color: 'var(--gold)' }}>{auth?.pseudo || '...'}</strong>
+            {auth?.grade && auth.grade !== 'membre' && (
+              <span style={{
+                marginLeft: '0.4rem', fontSize: '0.65rem', fontWeight: 700,
+                color: 'var(--gold)', background: 'rgba(201,151,42,0.12)',
+                border: '1px solid rgba(201,151,42,0.25)', borderRadius: '4px',
+                padding: '0.1rem 0.4rem', textTransform: 'uppercase', letterSpacing: '0.04em',
+              }}>{auth.grade}</span>
             )}
-            {profiles.map(p => (
-              <div key={p.name} className={`profile-item ${selected === p.name ? 'active' : ''}`}>
-                <button className="profile-select-btn" onClick={() => selectProfile(p.name)}>
-                  <span className="profile-radio">{selected === p.name ? '◉' : '○'}</span>
-                  <span className="profile-item-name">{p.name}</span>
-                </button>
-                <button className="profile-delete" onClick={() => deleteProfile(p.name)} title="Supprimer">✕</button>
-              </div>
-            ))}
-          </div>
-          <div className="profile-add">
-            <input
-              ref={inputRef}
-              className="profile-input"
-              type="text"
-              placeholder="Nouveau pseudo..."
-              value={newName}
-              onChange={e => setNewName(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && addProfile()}
-              maxLength={16}
-            />
-            <button className="profile-add-btn" onClick={addProfile}>Ajouter</button>
-          </div>
+          </p>
+          <button className="jdk-reset-btn" onClick={handleLogout}>
+            Se déconnecter
+          </button>
         </section>
 
         {/* Developer */}
@@ -305,7 +253,7 @@ export default function Settings({ onBack }) {
           <h2 className="settings-section-title">Réparation</h2>
           <p className="settings-desc">Supprime et retélécharge les fichiers du jeu corrompus ou manquants.</p>
           <p className="settings-desc" style={{ color: 'rgba(201,151,42,0.5)', fontSize: '0.66rem' }}>
-            Conservés : profils, JDK, captures d'écran, resource packs, shaders.
+            Conservés : compte, JDK, captures d'écran, resource packs, shaders.
           </p>
           {!repairWarning ? (
             <button className="jdk-reset-btn" onClick={() => setRepairWarning(true)} disabled={repairing}>
@@ -314,7 +262,7 @@ export default function Settings({ onBack }) {
           ) : (
             <div className="jdk-warning-box">
               <p className="jdk-warning-text">
-                ⚠ Tous les fichiers du jeu seront supprimés. Vos profils, JDK et packs sont conservés. Les fichiers seront retéléchargés au prochain lancement.
+                ⚠ Tous les fichiers du jeu seront supprimés. Votre compte, JDK et packs sont conservés. Les fichiers seront retéléchargés au prochain lancement.
               </p>
               <div className="jdk-warning-actions">
                 <button className="jdk-confirm-btn" onClick={handleRepair}>Confirmer</button>

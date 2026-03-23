@@ -208,74 +208,35 @@
   position: relative;
 }
 
-.home-warning {
-  font-size: 0.66rem;
-  color: rgba(201,151,42,0.7);
-  background: rgba(201,151,42,0.06);
-  border: 1px solid rgba(201,151,42,0.14);
-  border-radius: 6px;
-  padding: 0.4rem 0.6rem;
-  line-height: 1.45;
-}
-
-.profile-selector {
+.home-user-badge {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.8rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(201,151,42,0.18);
+  background: rgba(201,151,42,0.06);
+  border: 1px solid rgba(201,151,42,0.22);
   border-radius: 7px;
-  cursor: pointer;
-  transition: all 0.15s;
-  -webkit-user-select: none;
-  user-select: none;
 }
-.profile-selector:hover,
-.profile-selector.open {
-  background: rgba(201,151,42,0.07);
-  border-color: rgba(201,151,42,0.35);
+.profile-icon {
+  font-size: 0.85rem;
+  flex-shrink: 0;
 }
-.profile-icon { 
-  font-size: 0.8rem; 
-  flex-shrink: 0; 
-}
-.profile-name { 
-  flex: 1; 
-  font-size: 0.82rem; 
-  color: var(--text); 
-}
-.profile-arrow {
-   font-size: 0.55rem;
-   color: var(--muted); 
-}
-
-.profile-dropdown {
-  background: rgba(10, 8, 3, 0.97);
-  border: 1px solid rgba(201,151,42,0.2);
-  border-radius: 7px;
-  overflow: hidden;
-  margin-top: -0.35rem;
-}
-.profile-option {
-  padding: 0.48rem 0.8rem;
-  font-size: 0.8rem;
+.profile-name {
+  flex: 1;
+  font-size: 0.85rem;
   color: var(--text);
-  cursor: pointer;
-  transition: background 0.1s;
+  font-weight: 600;
 }
-.profile-option:hover {
-   background: rgba(201,151,42,0.08); 
-}
-.profile-option.active {
-   color: var(--gold); 
-   background: rgba(201,151,42,0.06); 
-}
-.profile-empty {
-  padding: 0.5rem 0.8rem;
-  font-size: 0.72rem;
-  color: var(--muted);
-  font-style: italic;
+.home-grade {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--gold);
+  background: rgba(201,151,42,0.12);
+  border: 1px solid rgba(201,151,42,0.25);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .home-notice {

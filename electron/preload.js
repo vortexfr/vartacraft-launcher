@@ -11,9 +11,13 @@ contextBridge.exposeInMainWorld('launcher', {
   // Info
   getGameDir:      ()        => ipcRenderer.invoke('get-game-dir'),
   pingServer:      ()        => ipcRenderer.invoke('ping-server'),
-  // Profiles
+  // Profiles (legacy)
   getProfiles:     ()        => ipcRenderer.invoke('get-profiles'),
   saveProfiles:    (data)    => ipcRenderer.invoke('save-profiles', data),
+  // Auth
+  login:           (pseudo, password) => ipcRenderer.invoke('launcher-login', { pseudo, password }),
+  logout:          ()        => ipcRenderer.invoke('launcher-logout'),
+  getAuth:         ()        => ipcRenderer.invoke('get-auth'),
   // Window
   openGameDir:     ()        => ipcRenderer.send('open-game-dir'),
   minimize:        ()        => ipcRenderer.send('minimize-window'),

@@ -5,11 +5,11 @@ import './Transition.css';
 
 export default function Transition({ onDone }) {
   const [username, setUsername] = useState('');
-  const [phase, setPhase] = useState('loading'); // 'loading' | 'welcome'
+  const [phase, setPhase] = useState('loading'); 
 
   useEffect(() => {
-    window.launcher?.getProfiles()
-      .then(data => setUsername(data?.selected || ''))
+    window.launcher?.getAuth()
+      .then(auth => setUsername(auth?.pseudo || ''))
       .catch(() => {});
 
     const t1 = setTimeout(() => setPhase('welcome'), 1400);

@@ -222,6 +222,127 @@
             margin-bottom: 40px;
             font-size: 0.95rem;
         }
+        .beta-banner {
+            background: rgba(255,193,7,0.08);
+            border: 1px solid rgba(255,193,7,0.35);
+            border-radius: 12px;
+            padding: 18px 24px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .beta-banner-icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .beta-banner-title {
+            color: #ffc107;
+            font-size: 0.97rem;
+        }
+        .beta-banner-text {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.88rem;
+            margin: 6px 0 0;
+        }
+        .beta-banner-link {
+            color: #ffc107;
+        }
+        .troubleshoot-section {
+            padding: 60px 0;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .troubleshoot-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 28px;
+        }
+        .troubleshoot-card h4 {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .troubleshoot-card p {
+            color: rgba(255,255,255,0.55);
+            font-size: 0.88rem;
+            margin-bottom: 12px;
+        }
+        .troubleshoot-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            counter-reset: step;
+        }
+        .troubleshoot-steps li {
+            color: rgba(255,255,255,0.65);
+            font-size: 0.88rem;
+            padding: 6px 0 6px 28px;
+            position: relative;
+            counter-increment: step;
+        }
+        .troubleshoot-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 6px;
+            background: rgba(255,193,7,0.15);
+            color: #ffc107;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .troubleshoot-code {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #ffc107;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+        .support-banner {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 28px;
+            text-align: center;
+        }
+        .support-banner p {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .btn-support {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-support:hover { opacity: 0.8; }
+        .btn-support-ticket {
+            background: #ffc107;
+            color: #000;
+        }
+        .btn-support-discord {
+            background: #5865F2;
+            color: #fff;
+        }
         .feature-list {
             list-style: none;
             padding: 0;
@@ -306,12 +427,24 @@
                 <div class="section-subtitle">Choisissez la version correspondant à votre système d'exploitation</div>
             </div>
 
+            <!-- BETA BANNER -->
+            <div class="beta-banner mb-5">
+                <svg class="beta-banner-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#ffc107"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <div>
+                    <strong class="beta-banner-title">Launcher en bêta — des bugs peuvent survenir</strong>
+                    <p class="beta-banner-text">
+                        Le launcher est actuellement en phase de test. Si vous rencontrez un problème au lancement du jeu, consultez la section
+                        <a href="#troubleshoot" class="beta-banner-link">Dépannage</a> ci-dessous.
+                    </p>
+                </div>
+            </div>
+
             <div class="row g-4 justify-content-center mb-5">
 
                 <!-- Windows -->
                 <div class="col-md-4">
                     <div class="card-wrapper">
-                        <span class="recommended-badge">⭐ Recommandé</span>
+                        <span class="recommended-badge">⭐ Recommandé pour Windows</span>
                         <div class="download-card">
                             <span class="os-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#0078d4"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg></span>
                             <h3>Windows</h3>
@@ -327,6 +460,7 @@
                 <!-- macOS -->
                 <div class="col-md-4">
                     <div class="card-wrapper">
+                        <span class="recommended-badge">⭐ Recommandé pour Mac</span>
                         <div class="download-card">
                             <span class="os-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#aaa"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg></span>
                             <h3>macOS</h3>
@@ -342,6 +476,7 @@
                 <!-- Linux -->
                 <div class="col-md-4">
                     <div class="card-wrapper">
+                        <span class="recommended-badge">⭐ Recommandé pour Linux</span>
                         <div class="download-card">
                             <span class="os-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="#e95420"><path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m0 1.5a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 12 8.5 1.5 1.5 0 0 1 10.5 7 1.5 1.5 0 0 1 12 5.5m-4.5 3a1.5 1.5 0 0 1 1.5 1.5 1.5 1.5 0 0 1-1.5 1.5A1.5 1.5 0 0 1 6 10a1.5 1.5 0 0 1 1.5-1.5m9 0A1.5 1.5 0 0 1 18 10a1.5 1.5 0 0 1-1.5 1.5A1.5 1.5 0 0 1 15 10a1.5 1.5 0 0 1 1.5-1.5M8.25 10h.25a3 3 0 0 0 2.5 2.9v.1h2v-.1A3 3 0 0 0 15.5 10h.25l1 1.7-1 1.7H8.25l-1-1.7zm3.75 5a1.5 1.5 0 0 1 1.5 1.5A1.5 1.5 0 0 1 12 18a1.5 1.5 0 0 1-1.5-1.5A1.5 1.5 0 0 1 12 15z"/></svg></span>
                             <h3>Linux</h3>
@@ -419,6 +554,69 @@
                     VirusTotal est un service de Google qui analyse les fichiers avec plus de 70 antivirus simultanément.
                     Téléchargez le .exe et glissez-le sur le site pour confirmer qu'il est propre.
                 </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TROUBLESHOOT -->
+    <div class="troubleshoot-section" id="troubleshoot">
+        <div class="container">
+            <div class="text-center mb-5">
+                <div class="section-title">Dépannage</div>
+                <div class="section-subtitle">Si le launcher ne fonctionne pas correctement, essayez ces solutions</div>
+            </div>
+            <div class="row g-4 justify-content-center">
+
+                <!-- Solution 1 : supprimer .VartacraftGame -->
+                <div class="col-md-6">
+                    <div class="troubleshoot-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ffc107"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            Supprimer le dossier de jeu
+                        </h4>
+                        <p>Si le jeu ne se lance pas ou plante au démarrage, supprimez le dossier <strong>.VartacraftGame</strong>. Le launcher le recréera automatiquement au prochain lancement.</p>
+                        <ol class="troubleshoot-steps">
+                            <li>Appuyez sur <strong>Win + R</strong> et tapez <code>%appdata%</code> puis validez</li>
+                            <li>Trouvez le dossier <strong>.VartacraftGame</strong> et supprimez-le</li>
+                            <li>Relancez le launcher — les fichiers seront retéléchargés automatiquement</li>
+                        </ol>
+                        <div class="troubleshoot-code">%appdata%\.VartacraftGame</div>
+                    </div>
+                </div>
+
+                <!-- Solution 2 : réinstaller le launcher -->
+                <div class="col-md-6">
+                    <div class="troubleshoot-card">
+                        <h4>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ffc107"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                            Réinstaller le launcher
+                        </h4>
+                        <p>Si aucune autre solution ne fonctionne, désinstallez complètement le launcher puis réinstallez-le depuis cette page.</p>
+                        <ol class="troubleshoot-steps">
+                            <li>Ouvrez les <strong>Paramètres Windows</strong> → Applications</li>
+                            <li>Recherchez <strong>Vartacraft Launcher</strong> et désinstallez-le</li>
+                            <li>Supprimez également le dossier <strong>.VartacraftGame</strong> dans <code>%appdata%</code></li>
+                            <li>Téléchargez et réinstallez le launcher depuis cette page</li>
+                        </ol>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SUPPORT -->
+            <div class="support-banner mt-5">
+                <p>Toujours bloqué ? Contactez le support en joignant une <strong>capture d'écran du problème</strong>.</p>
+                <div class="d-flex flex-wrap gap-3 justify-content-center">
+                    <a href="https://vartacraft.fr/support/tickets/create" target="_blank" rel="noopener noreferrer" class="btn-support btn-support-ticket">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        Ouvrir un ticket support
+                    </a>
+                    <a href="https://discord.gg/YJkVJ7CRh9" target="_blank" rel="noopener noreferrer" class="btn-support btn-support-discord">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+                        Rejoindre le Discord
+                    </a>
+                </div>
             </div>
 
         </div>
