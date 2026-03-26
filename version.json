@@ -1,8 +1,8 @@
 {
   "version": "1.1.1",
-  "url_win":     "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-Setup.exe",
-  "url_mac_arm": "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-arm64.dmg",
-  "url_mac_x64": "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-x64.dmg",
-  "url_linux":   "https://launcher.ouiweb.eu/launcher/VartacraftLauncher.AppImage",
-  "notes": "Correctifs et améliorations"
+  "url_win":     "https://vartacraft.fr/launcher/VartacraftLauncher-Setup.exe",
+  "url_mac_arm": "https://vartacraft.fr/launcher/VartacraftLauncher-arm64.dmg",
+  "url_mac_x64": "https://vartacraft.fr/launcher/VartacraftLauncher-x64.dmg",
+  "url_linux":   "https://vartacraft.fr/launcher/VartacraftLauncher.AppImage",
+  "notes": "Mise à jour du launcher pour corriger les bugs de la version 1.1.0"
 }

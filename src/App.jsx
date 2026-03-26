@@ -19,6 +19,7 @@ export default function App() {
   const [crashData, setCrashData] = useState(null);
   const [updateInfo, setUpdateInfo] = useState(null);
   const [updatePct,  setUpdatePct]  = useState(null);
+  const [updateErr,  setUpdateErr]  = useState(null);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const navRef = useRef([]);
 
@@ -98,10 +99,20 @@ export default function App() {
     return () => { c1?.(); c2?.(); c3?.(); };
   }, [navigate]);
 
-  function handleUpdate() {
+  async function handleUpdate() {
     if (!updateInfo) return;
+    setUpdateErr(null);
     setUpdatePct(0);
-    window.launcher.startUpdate(updateInfo.url).catch(() => setUpdatePct(null));
+    try {
+      const res = await window.launcher.startUpdate(updateInfo.url);
+      if (!res?.success) {
+        setUpdateErr(res?.error || 'Erreur lors du téléchargement.');
+        setUpdatePct(null);
+      }
+    } catch {
+      setUpdateErr('Impossible de télécharger la mise à jour.');
+      setUpdatePct(null);
+    }
   }
 
   const page_el = (() => {
@@ -129,6 +140,7 @@ export default function App() {
           position:'fixed', inset:0, zIndex:9999,
           background:'rgba(8,8,16,0.85)', backdropFilter:'blur(6px)',
           display:'flex', alignItems:'center', justifyContent:'center',
+          WebkitAppRegion:'no-drag',
         }}>
           <div style={{
             background:'#0f0e14', border:'1px solid rgba(201,151,42,0.4)',
@@ -144,6 +156,11 @@ export default function App() {
             {updateInfo.notes && (
               <div style={{ fontSize:'0.78rem', opacity:0.55, margin:'0.5rem 0 1rem', fontFamily:'Inter, sans-serif' }}>
                 {updateInfo.notes}
+              </div>
+            )}
+            {updateErr && (
+              <div style={{ fontSize:'0.75rem', color:'#f87171', margin:'0 0 0.75rem', fontFamily:'Inter, sans-serif' }}>
+                {updateErr}
               </div>
             )}
             {updatePct === null ? (
@@ -163,13 +180,16 @@ export default function App() {
                   overflow:'hidden', height:'8px', margin:'0.75rem 0 0.4rem',
                 }}>
                   <div style={{
-                    height:'100%', width:`${updatePct}%`,
+                    height:'100%',
+                    width: updatePct > 0 ? `${updatePct}%` : '100%',
                     background:'linear-gradient(90deg,#c9972a,#e8b840)',
-                    transition:'width 0.3s ease',
+                    transition: updatePct > 0 ? 'width 0.3s ease' : 'none',
+                    animation: updatePct === 0 ? 'progressPulse 1.2s ease-in-out infinite' : 'none',
+                    opacity: updatePct === 0 ? 0.5 : 1,
                   }} />
                 </div>
                 <div style={{ fontSize:'0.78rem', opacity:0.6, fontFamily:'Inter, sans-serif' }}>
-                  {updatePct < 100 ? `Téléchargement… ${updatePct}%` : 'Installation en cours…'}
+                  {updatePct === 0 ? 'Téléchargement en cours…' : updatePct < 100 ? `Téléchargement… ${updatePct}%` : 'Installation en cours…'}
                 </div>
               </div>
             )}

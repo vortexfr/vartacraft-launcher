@@ -24,7 +24,7 @@ const FORGE_INSTALLER_URL = `https://maven.minecraftforge.net/net/minecraftforge
 const SERVER_HOST         = 'gm53-dc02.ouiheberg.com';
 const SERVER_PORT         = 25632;
 const DISCORD_CLIENT_ID   = '1458808505380376810';
-const UPDATE_URL          = 'https://launcher.ouiweb.eu/launcher/version.json';
+const UPDATE_URL          = 'https://vartacraft.fr/api/launcher-version.json';
 const PRESERVED           = ['profiles.json', 'launcher-config.json', 'auth.json', 'runtime', 'screenshots', 'resourcepacks', 'shaderpacks', 'config'];
 
 // ── Paths ──────────────────────────────────────────────────────────────────────
