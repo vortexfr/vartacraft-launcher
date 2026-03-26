@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.1.1",
   "url_win":     "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-Setup.exe",
   "url_mac_arm": "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-arm64.dmg",
   "url_mac_x64": "https://launcher.ouiweb.eu/launcher/VartacraftLauncher-x64.dmg",

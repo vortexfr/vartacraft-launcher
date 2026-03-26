@@ -180,7 +180,7 @@ export default function App() {
       {/* Close confirmation */}
       {showCloseConfirm && (
         <div style={{
-          position:'fixed', inset:0, zIndex:10001,
+          position:'fixed', inset:0, zIndex:20000,
           background:'rgba(6,4,1,0.88)', backdropFilter:'blur(8px)',
           display:'flex', alignItems:'center', justifyContent:'center',
         }}>
@@ -221,15 +221,15 @@ export default function App() {
           <div className="radio-bar-dot" style={{ '--dot-color': radioStation.color }} />
           <span className="radio-bar-name">{radioStation.name}</span>
           <span className="radio-bar-genre">{radioStation.genre}</span>
-          <button className="radio-bar-btn" onClick={() => setRadioPlaying(p => !p)}>
+          <button className="radio-bar-btn" style={{WebkitAppRegion:'no-drag'}} onClick={() => setRadioPlaying(p => !p)}>
             {radioPlaying
               ? <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
               : <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>}
           </button>
-          <button className="radio-bar-btn" onClick={() => { setRadioPlaying(false); setRadioStation(null); }}>
+          <button className="radio-bar-btn" style={{WebkitAppRegion:'no-drag'}} onClick={() => { setRadioPlaying(false); setRadioStation(null); }}>
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
           </button>
-          <input type="range" min="0" max="1" step="0.01" value={radioVolume} onChange={e => setRadioVolume(parseFloat(e.target.value))} className="radio-bar-vol" />
+          <input type="range" min="0" max="1" step="0.01" value={radioVolume} onChange={e => setRadioVolume(parseFloat(e.target.value))} className="radio-bar-vol" style={{WebkitAppRegion:'no-drag'}} />
         </div>
       )}
 

@@ -222,6 +222,7 @@
   pointer-events: auto;
   isolation: isolate;
   transform: translateZ(0);
+  -webkit-app-region: no-drag;
 }
 .radio-bar-dot {
   width: 7px;

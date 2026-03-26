@@ -554,7 +554,7 @@ async function buildLaunchArgs(username, ram, gameDir) {
     classpath_separator: sep,
     classpath,
     launcher_name:  'VartacraftLauncher',
-    launcher_version:  '1.1.0',
+    launcher_version:  '1.1.1',
     clientid:   '0',
     auth_xuid:  '0',
   };
@@ -688,10 +688,14 @@ async function checkForUpdates() {
     if (!semverGt(data.version, current)) return;
     let url;
     if (process.platform === 'darwin') {
-      if (process.arch === 'arm64') url = data.url_mac_arm || data.url_mac || data.url;
-      else                          url = data.url_mac_x64 || data.url_mac || data.url;
-    } else if (process.platform === 'linux')  url = data.url_linux || data.url;
-    else                                      url = data.url_win   || data.url;
+      if (process.arch === 'arm64') 
+        url = data.url_mac_arm || data.url_mac || data.url;
+      else  
+        url = data.url_mac_x64 || data.url_mac || data.url;
+    } else if (process.platform === 'linux') 
+       url = data.url_linux || data.url;
+    else                                     
+       url = data.url_win   || data.url;
     if (!url) return;
     win?.webContents.send('update-available', { current, latest: data.version, url, notes: data.notes || '' });
   } catch (_) {}
@@ -804,6 +808,11 @@ ipcMain.handle('launch-game', async (_, { username, ram }) => {
   if (!isValidUsername(username)) return { success: false, error: 'Pseudo invalide (1-16 caractères, lettres/chiffres/_).' };
   if (typeof ram !== 'number' || ram < 1 || ram > 64) return { success: false, error: 'RAM invalide.' };
   if (isLaunching) return { success: false, error: 'Une installation est déjà en cours — veuillez patienter.' };
+  // Vérification du ban avant lancement
+  try {
+    const banCheck = await fetchJson(`https://vartacraft.fr/api/check-ban?pseudo=${encodeURIComponent(username)}`);
+    if (banCheck?.banned) return { success: false, error: banCheck.error || 'Ton compte est banni.' };
+  } catch (_) { return { success: false, error: 'Impossible de contacter le serveur. Vérifie ta connexion.' }; }
   isLaunching = true;
   try {
     const gameDir = getGameDir();
@@ -976,8 +985,8 @@ ipcMain.handle('clear-jdk-path', async () => {
 
 ipcMain.handle('get-news', async () => {
   try {
-    const data = await fetchJson('https://launcher.ouiweb.eu/launcher/news.json');
-    return { success: true, data };
+    const res = await fetchJson('https://vartacraft.fr/api/launcher-news.php?limit=50');
+    return { success: res.success !== false, data: res.data || [] };
   } catch (err) {
     return { success: false, error: err.message };
   }

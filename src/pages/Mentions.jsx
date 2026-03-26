@@ -2,7 +2,7 @@ import './Mentions.css';
 
 export default function Mentions({ onBack }) {
   const openSupport = () =>
-    window.launcher?.openUrl('https://vartacraft.fr/support/tickets/create');
+    window.launcher?.openUrl('https://vartacraft.fr/support');
 
   return (
     <div className="mentions">

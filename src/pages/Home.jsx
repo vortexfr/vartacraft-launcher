@@ -114,6 +114,15 @@ export default function Home({ onNav, radioBarActive }) {
     }
   };
 
+  const GRADE_STYLES = {
+    admin:      { label: 'Admin',      color: '#ff6b6b', bg: 'rgba(255,60,60,0.15)',    border: 'rgba(255,60,60,0.3)' },
+    moderateur: { label: 'Modérateur', color: '#7b8fff', bg: 'rgba(90,120,255,0.15)',   border: 'rgba(90,120,255,0.3)' },
+    titan:      { label: 'Titan',      color: '#c084fc', bg: 'rgba(168,85,247,0.15)',   border: 'rgba(168,85,247,0.35)' },
+    vartoxien:  { label: 'Vartoxien',  color: '#fb923c', bg: 'rgba(251,146,60,0.15)',   border: 'rgba(251,146,60,0.35)' },
+    azurien:    { label: 'Azurien',    color: '#38bdf8', bg: 'rgba(56,189,248,0.15)',   border: 'rgba(56,189,248,0.35)' },
+    youtubeur:  { label: 'Youtubeur',  color: '#f87171', bg: 'rgba(255,0,0,0.12)',      border: 'rgba(255,0,0,0.25)' },
+  };
+
   if (!ready) return null;
 
   return (
@@ -267,9 +276,18 @@ export default function Home({ onNav, radioBarActive }) {
             <div className="home-user-badge">
               <span className="profile-icon">👤</span>
               <span className="profile-name">{auth?.pseudo}</span>
-              {auth?.grade && auth.grade !== 'membre' && (
-                <span className="home-grade">{auth.grade}</span>
-              )}
+              {auth?.grade && auth.grade !== 'membre' && (() => {
+                const g = GRADE_STYLES[auth.grade];
+                return g ? (
+                  <span style={{
+                    fontSize: '0.65rem', fontWeight: 700,
+                    color: g.color, background: g.bg,
+                    border: `1px solid ${g.border}`,
+                    borderRadius: '20px', padding: '2px 8px',
+                    letterSpacing: '0.03em',
+                  }}>{g.label}</span>
+                ) : null;
+              })()}
             </div>
 
             {error && <p className="home-error">{error}</p>}
