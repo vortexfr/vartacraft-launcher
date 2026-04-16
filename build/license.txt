@@ -35,6 +35,6 @@ En installant et utilisant le Vartacraft Launcher, vous acceptez les conditions 
    avec le serveur. Vous acceptez ces mises à jour en utilisant ce logiciel.
 
 8. CONTACT
-   Pour toute question : https://vartacraft.fr/support/tickets/create
+   Pour toute question : https://vartacraft.fr/support
 
 En cliquant sur "J'accepte", vous confirmez avoir lu et accepté ces conditions.

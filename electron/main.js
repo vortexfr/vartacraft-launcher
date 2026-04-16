@@ -467,11 +467,8 @@ async function installAll(gameDir, send) {
 
   // 7. Assets
   send({ text: 'Vérification des assets...', pct: 86 });
-  const officialAssets = path.join(
-    process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
-    '.minecraft', 'assets'
-  );
-  if (!fs.existsSync(officialAssets)) {
+  const assetIndexFile = path.join(gameDir, 'assets', 'indexes', '5.json');
+  if (!fs.existsSync(assetIndexFile)) {
     await downloadAssets(gameDir, msg => send({ text: msg, pct: 90 }));
   }
 
@@ -533,11 +530,7 @@ async function buildLaunchArgs(username, ram, gameDir) {
   const sep = process.platform === 'win32' ? ';' : ':';
   const classpath = [...libs, mainJar].join(sep);
 
-  const officialAssets = path.join(
-    process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
-    '.minecraft', 'assets'
-  );
-  const assetsRoot = fs.existsSync(officialAssets) ? officialAssets : path.join(gameDir, 'assets');
+  const assetsRoot = path.join(gameDir, 'assets');
 
   const vars = {
     auth_player_name:    username,
@@ -554,7 +547,7 @@ async function buildLaunchArgs(username, ram, gameDir) {
     classpath_separator: sep,
     classpath,
     launcher_name:  'VartacraftLauncher',
-    launcher_version:  '1.1.1',
+    launcher_version:  '1.1.2',
     clientid:   '0',
     auth_xuid:  '0',
   };

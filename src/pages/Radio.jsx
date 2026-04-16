@@ -3,12 +3,13 @@ import bannerImg from '../assets/banner.png';
 import './Radio.css';
 
 export const STATIONS = [
-  { id: 'nrj',          name: 'NRJ',           genre: 'Pop / Hits',      color: '#ff4444', url: 'https://streaming.nrjaudio.fm/oumvmk8fnozc?origine=fluxradios' },
-  { id: 'funradio',     name: 'Fun Radio',      genre: 'Dance / Électro', color: '#ff8800', url: 'http://icecast.funradio.fr/fun-1-44-128?listen=webCwsBCggNCQgLDQUGBAcGBg' },
-  { id: 'skyrock',      name: 'Skyrock',        genre: 'Hip-Hop / R&B',   color: '#00aaff', url: 'https://icecast.skyrock.net/s/natio_mp3_128k' },
-  { id: 'rtl',          name: 'RTL',            genre: 'Généraliste',     color: '#e8000d', url: 'http://icecast.rtl.fr/rtl-1-44-128?listen=webCwsBCggNCQgLDQUGBAcGBg' },
-  { id: 'tomorrowland', name: 'Tomorrowland',   genre: 'EDM / Festival',  color: '#9b59b6', url: 'https://25683.live.streamtheworld.com/OWR_INTERNATIONAL.mp3' },
-  { id: 'qdance',       name: 'Q-dance',        genre: 'Hardstyle',       color: '#FFD700', url: 'https://25343.live.streamtheworld.com/Q_DANCE.mp3' },
+  { id: 'vartacraft',   name: 'Vartacraft',     genre: 'Radio officielle', color: '#FFD700', url: 'https://vartacraft.fr/api/radio-stream.php' },
+  { id: 'nrj',          name: 'NRJ',            genre: 'Pop / Hits',       color: '#ff4444', url: 'https://streaming.nrjaudio.fm/oumvmk8fnozc?origine=fluxradios' },
+  { id: 'funradio',     name: 'Fun Radio',       genre: 'Dance / Électro',  color: '#ff8800', url: 'http://icecast.funradio.fr/fun-1-44-128?listen=webCwsBCggNCQgLDQUGBAcGBg' },
+  { id: 'skyrock',      name: 'Skyrock',         genre: 'Hip-Hop / R&B',    color: '#00aaff', url: 'https://icecast.skyrock.net/s/natio_mp3_128k' },
+  { id: 'rtl',          name: 'RTL',             genre: 'Généraliste',      color: '#e8000d', url: 'http://icecast.rtl.fr/rtl-1-44-128?listen=webCwsBCggNCQgLDQUGBAcGBg' },
+  { id: 'tomorrowland', name: 'Tomorrowland',    genre: 'EDM / Festival',   color: '#9b59b6', url: 'https://25683.live.streamtheworld.com/OWR_INTERNATIONAL.mp3' },
+  { id: 'qdance',       name: 'Q-dance',         genre: 'Hardstyle',        color: '#FFD700', url: 'https://25343.live.streamtheworld.com/Q_DANCE.mp3' },
 ];
 
 export default function Radio({ onBack, currentStation, isPlaying, onSelect, volume, onVolume }) {

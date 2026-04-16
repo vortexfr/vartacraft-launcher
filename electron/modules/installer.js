@@ -247,8 +247,11 @@ async function installAll(gameDir, send) {
     process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
     '.minecraft', 'assets'
   );
-  if (!fs.existsSync(officialAssets)) {
-    await downloadAssets(gameDir, msg => send({ text: msg, pct: 90 }));
+  const assetIndexFile = path.join(officialAssets, 'indexes', '5.json');
+  const mcDir = path.join(process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'), '.minecraft');
+  const assetTargetDir = fs.existsSync(mcDir) ? mcDir : gameDir;
+  if (!fs.existsSync(officialAssets) || !fs.existsSync(assetIndexFile)) {
+    await downloadAssets(assetTargetDir, msg => send({ text: msg, pct: 90 }));
   }
 
   // 8. Nettoyage
